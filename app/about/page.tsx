@@ -1,10 +1,16 @@
-import Link from 'next/link'
+'use client'
+
+import { useLanguage } from '@/context/LanguageContext'
 
 export default function Home() {
+  const { lang } = useLanguage()
+
+  const text =
+    lang == 'en' ? 'A paragraph about the site' : 'Pastraipa apie svetainę'
+
   return (
     <div>
-      <div>Not sigma</div>
-      <Link href='/'>Go Home</Link>
+      <div>{text}</div>
     </div>
   )
 }

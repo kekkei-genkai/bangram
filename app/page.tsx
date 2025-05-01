@@ -1,15 +1,18 @@
-import Link from 'next/link'
+'use client'
 
-export default function Page() {
+import { useLanguage } from '@/context/LanguageContext'
+
+export default function Home() {
+  const { lang } = useLanguage()
+
+  const text =
+    lang == 'en'
+      ? 'Here should be some content'
+      : 'Titulinis puslapis under construction'
+
   return (
     <div>
-      <div>Sigma</div>
-      <div>
-        <Link href='/about'>Go to About Page</Link>
-      </div>
-      <div>
-        <Link href='/gallery'>Go to Gallery</Link>
-      </div>
+      <div>{text}</div>
     </div>
   )
 }

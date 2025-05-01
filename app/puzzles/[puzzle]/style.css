@@ -1,0 +1,7 @@
+.container {
+  @apply flex flex-col items-center justify-center gap-4 m-4;
+}
+
+.text {
+  @apply text-2xl text-gray-800;
+}
