@@ -13,7 +13,6 @@ export default function PixelImage({
   src,
   scale = 4,
   targetSize = 64,
-  threshold = -1,
   ...canvasProps
 }: PixelImageProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -69,22 +68,8 @@ export default function PixelImage({
         canvas.width,
         canvas.height,
       )
-
-      if (threshold >= 0) {
-        const imageData = ctx2.getImageData(0, 0, canvas.width, canvas.height)
-        const data = imageData.data
-        for (let i = 0; i < data.length; i += 4) {
-          const avg = (data[i] + data[i + 1] + data[i + 2]) / 3
-          if (avg < threshold) {
-            data[i + 3] = 0
-          } else {
-            data[i + 3] = 255
-          }
-        }
-        ctx2.putImageData(imageData, 0, 0)
-      }
     }
-  }, [src, scale, targetSize, threshold])
+  }, [src, scale, targetSize])
 
   return <canvas ref={canvasRef} {...canvasProps} />
 }

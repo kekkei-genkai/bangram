@@ -1,3 +1,12 @@
-.container {
-  @apply flex flex-col items-center justify-center gap-4 m-4 text-gray-800;
+.page-container {
+  @apply flex flex-col items-center justify-center gap-4 p-4 text-gray-800 w-full;
+}
+
+.interactive-puzzle {
+  @apply border-gray-800 bg-gray-200 border rounded;
+  width: 75%;
+}
+
+.interactive-puzzle:focus {
+  outline: none;
 }

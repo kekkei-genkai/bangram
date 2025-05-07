@@ -3,8 +3,9 @@
 import './style.css'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import PixelImage from '@/components/ui/PixelImage'
 import { useLanguage } from '@/context/LanguageContext'
+import InteractivePuzzle from '@/components/ui/InteractivePuzzle'
+import { Inter } from 'next/font/google'
 
 type Puzzle = {
   id: string
@@ -29,7 +30,6 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(puzzleID)
       const res = await fetch('../api/get-puzzle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,67 +49,67 @@ export default function Page() {
 
   return (
     <div>
-      <div>{errorMessage}</div>
       {puzzle && (
-        <div className='container'>
-          <PixelImage
-            src={`/puzzles/${puzzle.image_url}`}
-            targetSize={256}
-            scale={8}
-            threshold={puzzle.name_en == 'Ugnius' ? 24 : -1}
-            className='puzzle-image'
-          />
-
+        <div className='page-container'>
+          {/* name */}
           <h1 className='text-2xl font-bold'>
             {lang == 'en' ? puzzle.name_en : puzzle.name_lt}
           </h1>
+          {/* puzzle */}
+          <InteractivePuzzle
+            viewBox='0 0 640 480'
+            className='interactive-puzzle'
+          ></InteractivePuzzle>
+          {/* link */}
           <h2
             className='cursor-pointer'
             onClick={(event: React.MouseEvent<HTMLElement>) => {
               const target = event.currentTarget
-              const originalText = target.innerText
+              const originalText = target.textContent
               const fullUrl = window.location.origin + window.location.pathname
-              navigator.clipboard.writeText(fullUrl)
-              target.innerText = text.copied
-              setTimeout(() => {
-                target.innerText = originalText
-              }, 1500)
+
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard
+                  .writeText(fullUrl)
+                  .then(() => {
+                    target.textContent = text.copied
+                    setTimeout(() => {
+                      target.textContent = originalText
+                    }, 1500)
+                  })
+                  .catch(() => {
+                    copyUsingInput(fullUrl, target, originalText)
+                  })
+              } else {
+                copyUsingInput(fullUrl, target, originalText)
+              }
+
+              function copyUsingInput(
+                textToCopy: string,
+                target: HTMLElement,
+                originalText: string,
+              ) {
+                const input = document.createElement('input')
+                input.style.position = 'absolute'
+                input.style.left = '-9999px'
+                input.value = textToCopy
+                document.body.appendChild(input)
+                input.select()
+                input.setSelectionRange(0, input.value.length)
+                // Execute the copy command synchronously
+                const successful = document.execCommand('copy')
+                document.body.removeChild(input)
+                if (successful) {
+                  target.textContent = text.copied
+                  setTimeout(() => {
+                    target.textContent = originalText
+                  }, 1500)
+                }
+              }
             }}
           >
             {text.copy}
           </h2>
-          <form
-            className='flex flex-col items-center mt-4'
-            onSubmit={(e) => {
-              e.preventDefault()
-              const formData = new FormData(e.currentTarget)
-              const difficulty = formData.get('difficulty')
-              if (difficulty) {
-              }
-            }}
-          >
-            <div className='flex gap-4 mb-4'>
-              <label className='flex items-center gap-2'>
-                <input type='radio' name='difficulty' value='Easy' />
-                <span>Easy</span>
-              </label>
-              <label className='flex items-center gap-2'>
-                <input type='radio' name='difficulty' value='Medium' />
-                <span>Medium</span>
-              </label>
-              <label className='flex items-center gap-2'>
-                <input type='radio' name='difficulty' value='Hard' />
-                <span>Hard</span>
-              </label>
-            </div>
-            <button
-              type='submit'
-              className='px-4 py-2 bg-blue-500 text-white rounded'
-              style={{ width: 'fit-content' }}
-            >
-              Confirm Rating
-            </button>
-          </form>
         </div>
       )}
     </div>
