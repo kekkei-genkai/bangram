@@ -56,14 +56,15 @@ export default function Page() {
             src={`/puzzles/${puzzle.image_url}`}
             targetSize={256}
             scale={8}
+            threshold={puzzle.name_en == 'Ugnius' ? 24 : -1}
             className='puzzle-image'
           />
 
-          <b className='text'>
+          <h1 className='text-2xl font-bold'>
             {lang == 'en' ? puzzle.name_en : puzzle.name_lt}
-          </b>
-          <i
-            className='text cursor-pointer'
+          </h1>
+          <h2
+            className='cursor-pointer'
             onClick={(event: React.MouseEvent<HTMLElement>) => {
               const target = event.currentTarget
               const originalText = target.innerText
@@ -76,7 +77,39 @@ export default function Page() {
             }}
           >
             {text.copy}
-          </i>
+          </h2>
+          <form
+            className='flex flex-col items-center mt-4'
+            onSubmit={(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.currentTarget)
+              const difficulty = formData.get('difficulty')
+              if (difficulty) {
+              }
+            }}
+          >
+            <div className='flex gap-4 mb-4'>
+              <label className='flex items-center gap-2'>
+                <input type='radio' name='difficulty' value='Easy' />
+                <span>Easy</span>
+              </label>
+              <label className='flex items-center gap-2'>
+                <input type='radio' name='difficulty' value='Medium' />
+                <span>Medium</span>
+              </label>
+              <label className='flex items-center gap-2'>
+                <input type='radio' name='difficulty' value='Hard' />
+                <span>Hard</span>
+              </label>
+            </div>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-blue-500 text-white rounded'
+              style={{ width: 'fit-content' }}
+            >
+              Confirm Rating
+            </button>
+          </form>
         </div>
       )}
     </div>

@@ -52,6 +52,7 @@ export default function Page() {
                 src={`/puzzles/${puzzle.image_url}`}
                 targetSize={256}
                 scale={8}
+                threshold={puzzle.name_en == 'Ugnius' ? 24 : -1}
                 className='puzzle-image'
               />
 
