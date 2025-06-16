@@ -42,20 +42,23 @@ export default function Page() {
 
   const difficultyOptions: Record<
     Difficulty,
-    { label: string; color: string; emoji: string }
+    { labelEN: string; labelLT: string; color: string; emoji: string }
   > = {
     easy: {
-      label: 'Easy',
+      labelEN: 'Easy',
+      labelLT: 'Lengva',
       color: 'bg-green-500',
       emoji: '🟢',
     },
     medium: {
-      label: 'Medium',
+      labelEN: 'Medium',
+      labelLT: 'Vidutinė',
       color: 'bg-yellow-500',
       emoji: '🟠',
     },
     hard: {
-      label: 'Hard',
+      labelEN: 'Medium',
+      labelLT: 'Sunki',
       color: 'bg-red-500',
       emoji: '🔴',
     },
@@ -78,7 +81,10 @@ export default function Page() {
               ${difficultyOptions[puzzle.difficulty as Difficulty].color}`}
                 >
                   {difficultyOptions[puzzle.difficulty as Difficulty].emoji}{' '}
-                  {difficultyOptions[puzzle.difficulty as Difficulty].label}
+                  {lang == 'en'
+                    ? difficultyOptions[puzzle.difficulty as Difficulty].labelEN
+                    : difficultyOptions[puzzle.difficulty as Difficulty]
+                        .labelLT}
                 </div>
               )}
               <PixelImage

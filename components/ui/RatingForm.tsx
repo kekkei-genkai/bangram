@@ -3,6 +3,7 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 import useUserId from '@/hooks/useUserId'
+import { useLanguage } from '@/context/LanguageContext'
 
 type Difficulty = 'easy' | 'medium' | 'hard'
 
@@ -16,6 +17,23 @@ export default function RatingForm({
   className,
   ...rest
 }: RatingFormProps) {
+  const { lang } = useLanguage()
+
+  const text = {
+    title:
+      lang == 'en'
+        ? 'How difficult was the puzzle?'
+        : 'Įvertinkite dėlionės sudėtingumą',
+    submit: lang == 'en' ? 'Submit Rating' : 'Pateikti įvertinimą',
+    easy: lang == 'en' ? 'Easy' : 'Lengva',
+    medium: lang == 'en' ? 'Medium' : 'Vidutinė',
+    hard: lang == 'en' ? 'Hard' : 'Sunki',
+    success:
+      lang == 'en'
+        ? 'Review submitted! Thank you for your feedback!'
+        : 'Ačiū už atsiliepimą!',
+  }
+
   const userId = useUserId()
 
   const [selected, setSelected] = useState<Difficulty | null>(null)
@@ -35,33 +53,29 @@ export default function RatingForm({
 
     const data = await res.json()
     if (res.ok) {
-      setResult(`✅ Review submitted! Thank you for your feedback!`)
+      setResult(`✅ ${text.success}`)
     } else {
       setResult(`❌ Error: ${data.error}`)
     }
   }
 
-  const difficultyOptions: {
-    label: string
+  const colors: {
     value: Difficulty
     color: string
     emoji: string
   }[] = [
     {
       value: 'easy',
-      label: 'Easy',
       color: 'bg-green-500 hover:bg-green-600',
       emoji: '🟢',
     },
     {
       value: 'medium',
-      label: 'Medium',
       color: 'bg-yellow-500 hover:bg-yellow-600',
       emoji: '🟠',
     },
     {
       value: 'hard',
-      label: 'Hard',
       color: 'bg-red-500 hover:bg-red-600',
       emoji: '🔴',
     },
@@ -73,10 +87,10 @@ export default function RatingForm({
       className={clsx('text-center space-y-6', className)}
       {...rest}
     >
-      <h2 className='text-2xl font-semibold'>How difficult was this puzzle?</h2>
+      <h2 className='text-2xl font-semibold'>{text.title}</h2>
 
       <div className='flex justify-center gap-4'>
-        {difficultyOptions.map((opt) => (
+        {colors.map((opt) => (
           <button
             key={opt.value}
             type='button'
@@ -90,7 +104,7 @@ export default function RatingForm({
               transform: selected == opt.value ? 'scale(1.1)' : 'scale(1)',
             }}
           >
-            {opt.emoji} {opt.label}
+            {opt.emoji} {text[opt.value]}
           </button>
         ))}
       </div>
@@ -101,7 +115,7 @@ export default function RatingForm({
         className={`px-6 py-3 rounded bg-blue-600 text-white font-semibold shadow-md transition
           hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed`}
       >
-        Submit Rating
+        {text.submit}
       </button>
 
       <div>{result}</div>
