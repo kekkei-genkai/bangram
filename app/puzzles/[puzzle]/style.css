@@ -1,12 +1,17 @@
 .page-container {
-  @apply flex flex-col items-center justify-center gap-4 p-4 text-gray-800 w-full;
+  @apply flex flex-col items-center justify-center gap-6 p-6 text-gray-800 w-full border-gray-800 bg-gray-100 border rounded mx-auto my-6;
+  max-width: 75vw;
 }
 
 .interactive-puzzle {
-  @apply border-gray-800 bg-gray-200 border rounded;
-  width: 75%;
+  @apply border-gray-800 bg-gray-200 border rounded p-6;
+  max-height: 75vh;
 }
 
 .interactive-puzzle:focus {
   outline: none;
+}
+
+.rating-form {
+  @apply border-gray-800 bg-gray-200 border rounded p-6;
 }

@@ -1,16 +1,13 @@
-import { customAlphabet } from 'nanoid'
 import { NextRequest, NextResponse } from 'next/server'
 import type { ResultSetHeader } from 'mysql2'
 import db from '@/lib/db'
 import fs from 'fs'
 import path from 'path'
 
-const nanoid = customAlphabet('abcdefghjklmnprstuvxyz23456789', 6)
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { nameEN, nameLT, difficulty, imageUrl } = body
+    const { id, nameEN, nameLT, difficulty, imageUrl } = body
 
     if (!nameEN || !nameLT || !imageUrl) {
       return NextResponse.json(
@@ -28,21 +25,9 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    let id: string = ''
-    let exists = true
-
-    // Ensure uniqueness (very unlikely to collide, but this guarantees it)
-    while (exists) {
-      id = nanoid()
-      const [rows] = await db.execute('SELECT id FROM puzzles WHERE id = ?', [
-        id,
-      ])
-      exists = Array.isArray(rows) && rows.length > 0
-    }
-
     await db.execute<ResultSetHeader>(
-      'INSERT INTO puzzles (id, name_en, name_lt, difficulty, image_url) VALUES (?, ?, ?, ?, ?)',
-      [id, nameEN, nameLT, difficulty == '' ? null : difficulty, imageUrl],
+      'UPDATE puzzles SET name_en = ?, name_lt = ?, difficulty = ?, image_url = ? WHERE id = ?',
+      [nameEN, nameLT, difficulty == '' ? null : difficulty, imageUrl, id],
     )
 
     return NextResponse.json({ id }, { status: 201 })

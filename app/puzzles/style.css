@@ -8,8 +8,8 @@
 
 .puzzle-card {
   @apply flex flex-col items-center justify-center
-  bg-gray-200 hover:bg-gray-300 duration-300
-  border border-gray-800 rounded-lg;
+  bg-gray-200 hover:brightness-90 duration-300
+  border border-gray-800 rounded-lg overflow-hidden;
   flex: 1;
 }
 

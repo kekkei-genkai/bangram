@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState, useRef } from 'react'
 
 function useTrackRef<T>(initialValue: T) {
@@ -286,7 +288,9 @@ export default function InteractivePuzzle({
       }
 
       if (allPiecesMatched) {
-        alert('solved!')
+        setTimeout(() => {
+          alert('solved!')
+        }, 100)
       }
     }
 

@@ -5,7 +5,7 @@ import db from '@/lib/db'
 export async function GET() {
   try {
     const results = await db.execute<ResultSetHeader>(
-      'SELECT id, name_en, name_lt, image_url FROM puzzles',
+      'SELECT id, name_en, name_lt, difficulty, image_url FROM puzzles ORDER BY modified_at DESC',
     )
 
     if (!Array.isArray(results[0]) || results[0].length == 0) {
