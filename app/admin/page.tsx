@@ -224,7 +224,7 @@ export default function PuzzleManager() {
         )}
       </div>
 
-      {result && <p>{result}</p>}
+      {result}
     </div>
   )
 }

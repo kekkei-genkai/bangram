@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useLanguage } from '@/context/LanguageContext'
 import { usePathname } from 'next/navigation'
 
-const Navbar = () => {
+export default function Navbar() {
   const { lang, setLang } = useLanguage()
 
   const text = {
@@ -37,5 +37,3 @@ const Navbar = () => {
     </nav>
   )
 }
-
-export default Navbar
