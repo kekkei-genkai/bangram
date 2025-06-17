@@ -57,7 +57,7 @@ export default function Page() {
       emoji: '🟠',
     },
     hard: {
-      labelEN: 'Medium',
+      labelEN: 'Hard',
       labelLT: 'Sunki',
       color: 'bg-red-500',
       emoji: '🔴',
